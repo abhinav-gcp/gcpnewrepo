@@ -19,7 +19,6 @@ steps:
     args:
       - '-c'
       - |
-        gcloud container clusters get-credentials my-gke-cluster --zone=us-central1-a --project=amplified-asset-426508-e7
         kubectl apply -f deployment.yaml --record=true
 
 images:
