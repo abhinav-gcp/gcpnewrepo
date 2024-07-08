@@ -2,16 +2,16 @@ logsBucket: 'gs://my-project-logs'
 
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/${_PROJECT_ID}/my-apache-app', '.']
+    args: ['build', '-t', 'gcr.io/amplified-asset-426508-e7/my-apache-app', '.']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/${_PROJECT_ID}/my-apache-app']
+    args: ['push', 'gcr.io/amplified-asset-426508-e7/my-apache-app']
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['container', 'clusters', 'get-credentials', 'my-gke-cluster', '--zone', 'us-central1-a', '--project', '${_PROJECT_ID}']
+    args: ['container', 'clusters', 'get-credentials', 'my-gke-cluster', '--zone', 'us-central1-a', '--project', 'amplified-asset-426508-e7']
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['create', 'deployment', 'my-apache-app', '--image=gcr.io/${_PROJECT_ID}/my-apache-app', '--port=80']
-
-substitutions:
-  _PROJECT_ID: amplified-asset-426508-e7
+    env:
+      - CLOUDSDK_COMPUTE_ZONE=us-central1-a
+      - CLOUDSDK_CONTAINER_CLUSTER=my-gke-cluster
+    args: ['create', 'deployment', 'my-apache-app', '--image=gcr.io/amplified-asset-426508-e7/my-apache-app', '--port=80']
 
 images:
-  - gcr.io/${_PROJECT_ID}/my-apache-app
+  - gcr.io/amplified-asset-426508-e7/my-apache-app
