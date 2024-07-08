@@ -12,8 +12,12 @@ steps:
     args: ['push', 'gcr.io/amplified-asset-426508-e7/my-apache-app']
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['container', 'clusters', 'get-credentials', 'my-gke-cluster', '--zone', 'us-central1-a', '--project', 'amplified-asset-426508-e7']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['config', 'set', 'container/cluster', 'my-gke-cluster']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['config', 'set', 'compute/zone', 'us-central1-a']
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['--kubeconfig=/root/.kube/config', 'create', 'deployment', 'my-apache-app', '--image=gcr.io/amplified-asset-426508-e7/my-apache-app', '--port=80']
+    args: ['create', 'deployment', 'my-apache-app', '--image=gcr.io/amplified-asset-426508-e7/my-apache-app', '--port=80']
 
 images:
   - gcr.io/amplified-asset-426508-e7/my-apache-app
