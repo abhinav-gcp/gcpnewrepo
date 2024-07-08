@@ -3,10 +3,6 @@ steps:
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-apache-app', '.']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/my-apache-app']
-  - name: 'gcr.io/cloud-builders/terraform'
-    args: ['init']
-  - name: 'gcr.io/cloud-builders/terraform'
-    args: ['apply', '-auto-approve', '-var', 'project_id=$PROJECT_ID', '-var', 'zone=us-central1-a', '-var', 'cluster_name=my-gke-cluster']
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['container', 'clusters', 'get-credentials', 'my-gke-cluster', '--zone', 'us-central1-a', '--project', '$PROJECT_ID']
   - name: 'gcr.io/cloud-builders/kubectl'
