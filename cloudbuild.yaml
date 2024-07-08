@@ -12,13 +12,11 @@ steps:
 
   # Step 3: Configure kubectl to authenticate with GKE cluster
   - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
     args:
-      - 'container'
-      - 'clusters'
-      - 'get-credentials'
-      - 'my-gke-cluster'
-      - '--zone=us-central1-a'  # Correct zone where your GKE cluster is located
-      - '--project=amplified-asset-426508-e7'
+      - '-c'
+      - |
+        gcloud container clusters get-credentials my-gke-cluster --zone=us-central1-a --project=amplified-asset-426508-e7
 
   # Step 4: Deploy the application using kubectl
   - name: 'gcr.io/cloud-builders/kubectl'
