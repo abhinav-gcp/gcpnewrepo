@@ -14,13 +14,19 @@ steps:
 
   # Step 3: Configure kubectl to authenticate with GKE cluster
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['container', 'clusters', 'get-credentials', 'my-gke-cluster', '--zone', 'us-central1-a', '--project', 'amplified-asset-426508-e7']
+    args:
+      - 'container'
+      - 'clusters'
+      - 'get-credentials'
+      - 'my-gke-cluster'
+      - '--region=us-central1'  # Specify the correct region
+      - '--project=amplified-asset-426508-e7'
 
   # Step 4: Deploy the application using kubectl
   - name: 'gcr.io/cloud-builders/kubectl'
     env:
       - 'CLOUDSDK_COMPUTE_REGION=us-central1'
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'  # Ensure this matches your cluster's zone
       - 'CLOUDSDK_CONTAINER_CLUSTER=my-gke-cluster'
     args:
       - 'apply'
@@ -31,4 +37,3 @@ steps:
 # Specify the images to be used
 images:
   - 'gcr.io/amplified-asset-426508-e7/my-apache-app'
-
