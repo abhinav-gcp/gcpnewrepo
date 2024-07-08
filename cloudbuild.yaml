@@ -11,7 +11,7 @@ steps:
     args:
       - '-c'
       - |
-        gcloud container clusters get-credentials my-gke-cluster --zone=us-central1-a --project=amplified-asset-426508-e7
+        gcloud container clusters get-credentials my-gke-cluster --zone=us-central1-a --project amplified-asset-426508-e7
 
   # Step 3: Deploy application using kubectl
   - name: 'gcr.io/cloud-builders/kubectl'
