@@ -1,16 +1,17 @@
 logsBucket: 'gs://my-project-logs'
+
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-apache-app', '.']
+    args: ['build', '-t', 'gcr.io/${_PROJECT_ID}/my-apache-app', '.']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/my-apache-app']
+    args: ['push', 'gcr.io/${_PROJECT_ID}/my-apache-app']
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['container', 'clusters', 'get-credentials', 'my-gke-cluster', '--zone', 'us-central1-a', '--project', '$PROJECT_ID']
+    args: ['container', 'clusters', 'get-credentials', 'my-gke-cluster', '--zone', 'us-central1-a', '--project', '${_PROJECT_ID}']
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['create', 'deployment', 'my-apache-app', '--image=gcr.io/$PROJECT_ID/my-apache-app', '--port=80']
+    args: ['create', 'deployment', 'my-apache-app', '--image=gcr.io/${_PROJECT_ID}/my-apache-app', '--port=80']
 
 substitutions:
   _PROJECT_ID: amplified-asset-426508-e7
 
 images:
-  - gcr.io/$PROJECT_ID/my-apache-app
+  - gcr.io/${_PROJECT_ID}/my-apache-app
