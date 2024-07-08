@@ -15,3 +15,15 @@ spec:
       containers:
       - name: my-apache-app
         image: gcr.io/amplified-asset-426508-e7/my-apache-app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-apache-app
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80        # Port exposed by the service
+      targetPort: 80  # Port on the container that the service forwards traffic to
+  selector:
+    app: my-apache-app
