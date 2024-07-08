@@ -10,7 +10,6 @@ steps:
     args: ['create', 'deployment', 'my-apache-app', '--image=gcr.io/$PROJECT_ID/my-apache-app', '--port=80']
 
 options:
-  logs_bucket: 'gs://my-logs-bucket'
   serviceAccount: '333995508011-compute@developer.gserviceaccount.com'
 
 substitutions:
