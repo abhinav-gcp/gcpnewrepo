@@ -1,22 +1,34 @@
 logsBucket: 'gs://my-project-logs'
 
- env:
-      - CLOUDSDK_COMPUTE_REGION=us-central1
-      - CLOUDSDK_COMPUTE_ZONE=us-central1-a
-      - CLOUDSDK_CONTAINER_CLUSTER=my-gke-cluster
-    args: ['create', 'deployment', 'my-apache-app', '--image=gcr.io/amplified-asset-426508-e7/my-apache-app', '--port=80']
+# cloudbuild.yaml
 
+# Specify the Cloud Build configuration
 steps:
+  # Step 1: Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/amplified-asset-426508-e7/my-apache-app', '.']
+
+  # Step 2: Push the Docker image to Google Container Registry (GCR)
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/amplified-asset-426508-e7/my-apache-app']
+
+  # Step 3: Configure kubectl to authenticate with GKE cluster
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['container', 'clusters', 'get-credentials', 'my-gke-cluster', '--zone', 'us-central1-a', '--project', 'amplified-asset-426508-e7']
+
+  # Step 4: Deploy the application using kubectl
   - name: 'gcr.io/cloud-builders/kubectl'
     env:
-      - KUBECONFIG=/root/.kube/config
-    args: ['create', 'deployment', 'my-apache-app', '--image=gcr.io/amplified-asset-426508-e7/my-apache-app', '--port=80']
+      - 'CLOUDSDK_COMPUTE_REGION=us-central1'
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=my-gke-cluster'
+    args:
+      - 'apply'
+      - '-f'
+      - 'deployment.yaml'
+      - '--record=true'  # Optional: Record the revision history
 
+# Specify the images to be used
 images:
-  - gcr.io/amplified-asset-426508-e7/my-apache-app
+  - 'gcr.io/amplified-asset-426508-e7/my-apache-app'
+
