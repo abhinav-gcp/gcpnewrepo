@@ -2,10 +2,13 @@ steps:
   # Step 1: Build and push Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/amplified-asset-426508-e7/my-apache-app', '.']
+    dir: 'gcpnewrepo'
+
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/amplified-asset-426508-e7/my-apache-app']
+    dir: 'gcpnewrepo'
 
-steps:
+  # Step 2: Fetch credentials for GKE cluster
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
@@ -13,13 +16,22 @@ steps:
       - |
         gcloud container clusters get-credentials my-gke-cluster --zone=us-central1-a --project=amplified-asset-426508-e7
 
+  # Step 3: Apply Terraform configuration
+  - name: 'hashicorp/terraform'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        terraform init
+        terraform apply -auto-approve
+
+  # Step 4: Deploy application using kubectl
   - name: 'gcr.io/cloud-builders/kubectl'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        kubectl apply -f deployment.yaml --record=true
-
+        kubectl apply -f gcpnewrepo/deployment.yaml --record=true
 
 images:
   - 'gcr.io/amplified-asset-426508-e7/my-apache-app'
