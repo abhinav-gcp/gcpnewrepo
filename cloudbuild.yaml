@@ -1,5 +1,3 @@
-logsBucket: 'gs://my-project-logs'
-
 # cloudbuild.yaml
 
 # Specify the Cloud Build configuration
@@ -19,7 +17,7 @@ steps:
       - 'clusters'
       - 'get-credentials'
       - 'my-gke-cluster'
-      - '--region=us-central1'  # Specify the correct region
+      - '--zone=us-central1-a'  # Correct zone where your GKE cluster is located
       - '--project=amplified-asset-426508-e7'
 
   # Step 4: Deploy the application using kubectl
