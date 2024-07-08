@@ -14,12 +14,14 @@ steps:
         gcloud container clusters get-credentials my-gke-cluster --zone=us-central1-a --project=amplified-asset-426508-e7
 
   # Step 3: Deploy application using kubectl
-  - name: 'gcr.io/cloud-builders/kubectl'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
     args:
-      - 'apply'
-      - '-f'
-      - 'deployment.yaml'
-      - '--record=true'
+      - '-c'
+      - |
+        gcloud config set container/cluster my-gke-cluster
+        gcloud config set compute/zone us-central1-a
+        kubectl apply -f deployment.yaml --record=true
 
 images:
   - 'gcr.io/amplified-asset-426508-e7/my-apache-app'
