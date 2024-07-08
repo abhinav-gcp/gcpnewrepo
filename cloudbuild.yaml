@@ -1,7 +1,5 @@
-# cloudbuild.yaml
-
 steps:
-  # Step 1: Build and push Docker image (assuming this step is unchanged)
+  # Step 1: Build and push Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/amplified-asset-426508-e7/my-apache-app', '.']
   - name: 'gcr.io/cloud-builders/docker'
@@ -20,5 +18,8 @@ steps:
     args:
       - 'apply'
       - '-f'
-      - 'deployment.yaml'  # Ensure this file exists in your Cloud Build workspace
-      - '--record=true'    # Optional: Record the revision history
+      - 'deployment.yaml'
+      - '--record=true'
+
+images:
+  - 'gcr.io/amplified-asset-426508-e7/my-apache-app'
