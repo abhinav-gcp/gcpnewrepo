@@ -1,4 +1,13 @@
-steps:
+# Step 1: Build and push Docker image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/amplified-asset-426508-e7/my-apache-app', '.']
+  dir: 'gcpnewrepo'
+
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/amplified-asset-426508-e7/my-apache-app']
+  dir: 'gcpnewrepo'
+
+# Step 2: Fetch credentials for GKE cluster (us-central1-a)steps:
   # Step 1: Build and push Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/amplified-asset-426508-e7/my-apache-app', '.']
@@ -8,7 +17,15 @@ steps:
     args: ['push', 'gcr.io/amplified-asset-426508-e7/my-apache-app']
     dir: 'gcpnewrepo'
 
-  # Step 2: Fetch credentials for GKE cluster
+  # Step 2: List available clusters in us-central1-a zone
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud container clusters list --zone=us-central1-a --project=amplified-asset-426508-e7
+
+  # Step 3: Fetch credentials for GKE cluster (us-central1-a)
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
@@ -23,6 +40,23 @@ steps:
       - '-c'
       - |
         kubectl apply -f gcpnewrepo/deployment.yaml --record=true
+
+images:
+  - 'gcr.io/amplified-asset-426508-e7/my-apache-app'
+- name: 'gcr.io/cloud-builders/gcloud'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    gcloud container clusters get-credentials my-gke-cluster --zone=us-central1-a --project=amplified-asset-426508-e7
+
+# Step 3: Deploy application using kubectl
+- name: 'gcr.io/cloud-builders/kubectl'
+  entrypoint: 'bash'
+  args:
+  - '-c'
+  - |
+    kubectl apply -f gcpnewrepo/deployment.yaml --record=true
 
 images:
   - 'gcr.io/amplified-asset-426508-e7/my-apache-app'
