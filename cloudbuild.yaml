@@ -1,16 +1,13 @@
 # cloudbuild.yaml
 
-# Specify the Cloud Build configuration
 steps:
-  # Step 1: Build the Docker image
+  # Step 1: Build and push Docker image (assuming this step is unchanged)
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/amplified-asset-426508-e7/my-apache-app', '.']
-
-  # Step 2: Push the Docker image to Google Container Registry (GCR)
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/amplified-asset-426508-e7/my-apache-app']
 
-  # Step 3: Configure kubectl to authenticate with GKE cluster
+  # Step 2: Fetch credentials for GKE cluster
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
@@ -18,18 +15,10 @@ steps:
       - |
         gcloud container clusters get-credentials my-gke-cluster --zone=us-central1-a --project=amplified-asset-426508-e7
 
-  # Step 4: Deploy the application using kubectl
+  # Step 3: Deploy application using kubectl
   - name: 'gcr.io/cloud-builders/kubectl'
-    env:
-      - 'CLOUDSDK_COMPUTE_REGION=us-central1'
-      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'  # Ensure this matches your cluster's zone
-      - 'CLOUDSDK_CONTAINER_CLUSTER=my-gke-cluster'
     args:
       - 'apply'
       - '-f'
-      - 'deployment.yaml'
-      - '--record=true'  # Optional: Record the revision history
-
-# Specify the images to be used
-images:
-  - 'gcr.io/amplified-asset-426508-e7/my-apache-app'
+      - 'deployment.yaml'  # Ensure this file exists in your Cloud Build workspace
+      - '--record=true'    # Optional: Record the revision history
