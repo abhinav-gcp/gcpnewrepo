@@ -1,4 +1,4 @@
-logsBucket: 'gs://my-logs-bucket'
+logsBucket: 'gs://my-project-logs'
 steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-apache-app', '.']
