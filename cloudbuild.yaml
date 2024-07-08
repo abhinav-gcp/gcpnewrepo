@@ -3,7 +3,7 @@ logsBucket: 'gs://my-project-logs'
 steps:
   # Step 1: Authenticate with GCP using service account
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['auth', 'activate-service-account', '333995508011-compute@developer.gserviceaccount.com', '--cred-file', 'amplified-asset-426508-e7-f9855e3f9f73.json']
+    args: ['auth', 'activate-service-account', '333995508011-compute@developer.gserviceaccount.com', '--key-file', 'amplified-asset-426508-e7-f9855e3f9f73.json']
 
   # Step 2: Build Docker image
   - name: 'gcr.io/cloud-builders/docker'
