@@ -1,3 +1,5 @@
+logsBucket: 'gs://my-project-logs'
+
 steps:
   # Step 1: Authenticate with GCP
   - name: 'gcr.io/cloud-builders/gcloud'
