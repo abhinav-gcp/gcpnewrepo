@@ -9,11 +9,7 @@ steps:
     args: ['create', 'deployment', 'my-apache-app', '--image=gcr.io/$PROJECT_ID/my-apache-app', '--port=80']
 
 substitutions:
-  _PROJECT_ID: $PROJECT_ID
-
-options:
-  machineType: 'e2-medium'
-  diskSizeGb: 50
+  _PROJECT_ID: amplified-asset-426508-e7
 
 images:
   - gcr.io/$PROJECT_ID/my-apache-app
