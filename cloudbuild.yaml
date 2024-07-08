@@ -11,9 +11,13 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/amplified-asset-426508-e7/my-apache-app']
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['container', 'clusters', 'get-credentials', 'my-gke-cluster', '--zone', 'us-central1-a', '--project', 'amplified-asset-426508-e7']
+    args: ['container', 'clusters', 'get-credentials', 'y-gke-cluster', '--zone', 'us-central1-a', '--project', 'amplified-asset-426508-e7']
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['create', 'deployment', 'my-apache-app', '--image=gcr.io/amplified-asset-426508-e7/my-apache-app', '--port=80']
+    env:
+      - CLOUDSDK_COMPUTE_REGION=$CLOUDSDK_COMPUTE_REGION
+      - CLOUDSDK_COMPUTE_ZONE=$CLOUDSDK_COMPUTE_ZONE
+      - CLOUDSDK_CONTAINER_CLUSTER=$CLOUDSDK_CONTAINER_CLUSTER
+    args: ['create', 'deployment', 'y-apache-app', '--image=gcr.io/amplified-asset-426508-e7/my-apache-app', '--port=80']
 
 images:
   - gcr.io/amplified-asset-426508-e7/my-apache-app
