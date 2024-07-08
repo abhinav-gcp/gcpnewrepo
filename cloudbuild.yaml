@@ -5,7 +5,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/amplified-asset-426508-e7/my-apache-app']
 
-  # Step 2: Fetch credentials for GKE cluster
+  # Step 2: Fetch credentials  GKE cluster
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
