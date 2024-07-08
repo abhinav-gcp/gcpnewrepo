@@ -1,19 +1,23 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/amplified-asset-426508-e7/my-apache-app', '.']
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/my-apache-app', '.']
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/amplified-asset-426508-e7/my-apache-app']
+    args: ['push', 'gcr.io/$PROJECT_ID/my-apache-app']
   - name: 'gcr.io/cloud-builders/terraform'
     args: ['init']
   - name: 'gcr.io/cloud-builders/terraform'
-    args: ['apply', '-auto-approve', '-var', 'project_id=amplified-asset-426508-e7', '-var', 'zone=us-central1-a', '-var', 'cluster_name=my-gke-cluster']
+    args: ['apply', '-auto-approve', '-var', 'project_id=$PROJECT_ID', '-var', 'zone=us-central1-a', '-var', 'cluster_name=my-gke-cluster']
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['container', 'clusters', 'get-credentials', 'my-gke-cluster', '--zone', 'us-central1-a', '--project', 'amplified-asset-426508-e7']
+    args: ['container', 'clusters', 'get-credentials', 'my-gke-cluster', '--zone', 'us-central1-a', '--project', '$PROJECT_ID']
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['create', 'deployment', 'my-apache-app', '--image=gcr.io/amplified-asset-426508-e7/my-apache-app', '--port=80']
+    args: ['create', 'deployment', 'my-apache-app', '--image=gcr.io/$PROJECT_ID/my-apache-app', '--port=80']
+
+substitutions:
+  _PROJECT_ID: $PROJECT_ID
 
 options:
-  logging: CLOUD_LOGGING_ONLY
+  machineType: 'e2-medium'
+  diskSizeGb: 50
 
 images:
-  - 'gcr.io/amplified-asset-426508-e7/my-apache-app'
+  - gcr.io/$PROJECT_ID/my-apache-app
