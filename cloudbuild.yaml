@@ -1,24 +1,17 @@
 steps:
-  # Step 1: Build and push Docker image (if not already done)
+  # Step 1: Build and push Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/amplified-asset-426508-e7/my-apache-app', '.']
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/amplified-asset-426508-e7/my-apache-app']
 
-  # Step 2: Fetch credentials for GKE cluster
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        gcloud container clusters get-credentials my-gke-cluster --zone=us-central1-a --project=amplified-asset-426508-e7
-
-  # Step 3: Deploy application using kubectl
+  # Step 2: Set KUBECONFIG and deploy using kubectl
   - name: 'gcr.io/cloud-builders/kubectl'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
+        echo "$KUBE_CONFIG_DATA" > /workspace/.kube/config
         kubectl apply -f deployment.yaml --record=true
 
 images:
