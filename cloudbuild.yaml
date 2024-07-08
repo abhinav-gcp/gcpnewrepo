@@ -1,5 +1,5 @@
 steps:
-  # Step 1: Build and push Docker image
+  # Step 1: Build and push Docker image (if not already done)
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/amplified-asset-426508-e7/my-apache-app', '.']
   - name: 'gcr.io/cloud-builders/docker'
