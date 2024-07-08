@@ -5,7 +5,10 @@ steps:
     args: ['push', 'gcr.io/amplified-asset-426508-e7/my-apache-app']
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['container', 'clusters', 'get-credentials', 'my-gke-cluster', '--zone', 'us-central1-a', '--project', 'amplified-asset-426508-e7']
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['run', 'my-apache-app', '--image=gcr.io/amplified-asset-426508-e7/my-apache-app', '--port=80']
+  - name: 'gcr.io/cloud-builders/terraform'
+    args: ['init']
   - name: 'gcr.io/cloud-builders/terraform'
     args: ['apply', '-auto-approve']
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['run', 'my-apache-app', '--image=gcr.io/amplified-asset-426508-e7/my-apache-app', '--port=80']
+
