@@ -16,15 +16,6 @@ steps:
       - |
         gcloud container clusters get-credentials my-gke-cluster --zone=us-central1-a --project=amplified-asset-426508-e7
 
-  # Step 3: Apply Terraform configuration
-  - name: 'hashicorp/terraform'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        terraform init
-        terraform apply -auto-approve
-
   # Step 4: Deploy application using kubectl
   - name: 'gcr.io/cloud-builders/kubectl'
     entrypoint: 'bash'
